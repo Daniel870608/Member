@@ -1,0 +1,43 @@
+﻿@model MVCex.Models.Gbook
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+
+@using (Html.BeginForm())
+{
+    <table>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.Name)
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.Name)
+                @Html.ValidationMessageFor(model => model.Name)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.Content)
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.Content)
+                @Html.ValidationMessageFor(model => model.Content)
+            </td>
+        </tr>
+    </table>
+    if (string.IsNullOrEmpty(Model.Reply))
+    {
+        <input type="submit" value="修改" />
+    }
+    else
+    {
+        <h4>此留言已回覆無法修改，請</h4>
+        @Html.ActionLink("返回列表", "Index")
+    }
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

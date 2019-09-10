@@ -1,0 +1,117 @@
+﻿@model MVCex.ViewModels.Guestbook
+
+<div id="DataList">
+    <h3>留言板內容</h3>
+    @using (Ajax.BeginForm("GetDataList", "Home", new AjaxOptions  { InsertionMode = InsertionMode.Replace,UpdateTargetId = "DataList" }))
+    {
+        <table>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.Search)
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.Search)
+                </td>
+                <td>
+                    <input type="submit" name="searchBtn" value="搜尋" />
+                </td>
+            </tr>
+        </table>
+    }
+    <table>
+        @if (!Model.DataList.Count.Equals(0))
+        {
+            foreach (var item in Model.DataList)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(model => model.DataList[0].Name)
+                    </td>
+                    <td>
+                        @item.Name
+                    </td>
+                    <td>
+                        @Html.DisplayNameFor(model => model.DataList[0].CreateTime)
+                    </td>
+                    <td>
+                        @item.CreateTime
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(model => model.DataList[0].Content)
+                    </td>
+                    <td>
+                        @item.Content
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(model => model.DataList[0].Reply)
+                    </td>
+                    <td>
+                        @item.Reply
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(model => model.DataList[0].ReplyTime)
+                    </td>
+                    <td>
+                        @item.ReplyTime
+                    </td>
+                    <td colspan="2">
+                        @Html.ActionLink("修改留言", "Edit", new { Id = item.Id }, null)
+                        @Html.ActionLink("回覆留言", "Reply", new { Id = item.Id }, null)
+                        @Html.ActionLink("刪除留言", "Delete", new { Id = item.Id }, null)
+                    </td>
+                </tr>
+
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="4">
+                    資料庫內查無資料
+                </td>
+            </tr>
+        }
+        <tr>
+            <td>
+                @if (Model.ForPaging.NowPage > 1)
+                {
+                    @Ajax.ActionLink("<<", "Index", new { page = 1, Search = Model.Search }, new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "DataList" })
+                    @Ajax.ActionLink("<", "Index", new { page = Model.ForPaging.NowPage - 1, Search = Model.Search }, new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "DataList" })
+                }
+            </td>
+            <td>
+                @for (var page = Model.ForPaging.NowPage - 6; page < Model.ForPaging.NowPage + 6; page++)
+                {
+                    if (page > 0 && page <= Model.ForPaging.MaxPage)
+                    {
+                        if (page == Model.ForPaging.NowPage)
+                        {
+                            <b>@page</b>
+                        }
+                        else
+                        {
+                            @Ajax.ActionLink(page.ToString(), "Index",new {page = page,Search = Model.Search }, new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "DataList" })
+                        }
+                    }
+                }
+            </td>
+            <td>
+                @if (Model.ForPaging.NowPage < Model.ForPaging.MaxPage)
+                {
+                    @Ajax.ActionLink(">", "Index", new { page = Model.ForPaging.NowPage + 1, Search = Model.Search }, new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "DataList" })
+                    @Ajax.ActionLink(">>", "Index", new { page = Model.ForPaging.MaxPage, Search = Model.Search }, new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "DataList" })
+                }
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

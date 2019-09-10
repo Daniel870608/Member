@@ -1,0 +1,24 @@
+﻿using MVCex.Models;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Web;
+
+namespace MVCex.ViewModels
+{
+    public class MemberRegisterView
+    {
+        public Members MemberData { get; set; }
+
+        [DisplayName("密碼")]
+        [Required(ErrorMessage = "請輸入密碼")]
+        public string Password { get; set; }
+
+        [DisplayName("確認密碼")]
+        [Required(ErrorMessage = "請確認密碼")]
+        [Compare("Password",ErrorMessage = "確認密碼不一致")]
+        public string PasswordChek { get; set; }
+    }
+}
